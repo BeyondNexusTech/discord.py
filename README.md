@@ -1,6 +1,6 @@
 <div style="text-align:center;">
   
-  [![BeyondNexusTech](static/beyondbot_banner_2025.jpg)](https://www.beyondnexus.fr)
+  [![BeyondNexusTech](static/BeyondBot_2025.png)](https://www.beyondnexus.fr)
 
 </div>
 
