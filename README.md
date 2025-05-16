@@ -1,24 +1,31 @@
+<div style="text-align:center;">
+  
+  [![BeyondNexusTech](static/beyondbot_banner_2025.jpg)](https://www.beyondnexus.fr)
+
+</div>
+
 # 🤖 BeyondNexusTech Discord Bot
 
-Un bot Discord développé en Python avec `discord.py`. Il propose des commandes utiles, ludiques, et personnalisables, comme le classique **pile ou face**, ainsi que des commandes administratives et des extensions futures.
+A Discord bot developed in Python using `discord.py`. It offers useful, fun, and customizable commands, such as the classic **heads or tails** and **dice roll**, as well as administrative commands for adding roles via reaction and extensions for sending embed or Twitch messages.
 
 ---
 
-## 🚀 Fonctionnalités
+## 🚀 Features
 
-- 🎮 `!pileouface` → Lance une pièce virtuelle
-- 📌 Système de commandes modulaires (`commands/`, `cogs/`)
-- 🛠️ Gestion des événements (`on_ready`, `on_message`, etc.)
-- 🔒 Chargement sécurisé via `.env` (token Discord)
-- ⚙️ Prêt à être déployé sur un serveur Linux/Docker
+- 🎮 `!pileouface` → Flip a virtual coin, `!dé` → Flip a virutal dice
+- 💬 Sent embed messages, automated sending a message during Twitch live
+- 📌 Modular control system (`cogs/`)
+- 🛠️ Event management (`on_reaction`, etc.)
+- 🔒 Secure loading via `.env` (token Discord et Twitch)
+- ⚙️ Ready to be deployed on a Linux/Docker server
 
 ---
 
 ## 🧰 Technologies
 
-- Python 3.10+
+- `Python 3.10+`
 - `discord.py` (v2.x)
-- `python-dotenv` pour les variables d'environnement
+- `python-dotenv` for the environment variables
 
 ---
 
@@ -30,3 +37,16 @@ cd ton-bot
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
+
+---
+<br>
+<br>
+
+## License
+This project is licensed under the BeyondNexusTech License. See the LICENSE file for details.
+
+<br>
+
+## Contact
+For any questions or support, please open an issue on GitHub or contact the project administrator via email.
