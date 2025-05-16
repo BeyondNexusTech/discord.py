@@ -36,10 +36,10 @@ class MessageCog(commands.Cog):
                 # Sends the message and saves the message ID
                 sent_message = await channel.send(content=f"{mention}, I'm live on Twitch !\n https://twitch.tv/YourStreamerName !", embed=embed)
                 self.bot.TWITCH_LAST_MESSAGE_ID = sent_message.id
-                print(f'Message sent with ID: {self.bot.TWITCH_LAST_MESSAGE_ID}')
+                print(f"Message sent with ID: {self.bot.TWITCH_LAST_MESSAGE_ID}")
 
         else:
-            print(f'Error : Unable to find Discord channel with ID {channel}.')    
+            print(f"Error : Unable to find Discord channel with ID {channel}.")    
     
     @commands.hybrid_command(name="send_embed_message", description="Send an embed message by choosing the channel", brief="Sending an embed")
     @commands.has_role("Administrator")
@@ -83,16 +83,16 @@ class MessageCog(commands.Cog):
 
             # Implementation of the embed data to be sent
             if author_name:
-                embed.set_author(name=f'{author_name}', url=f'{author_url}', icon_url=f'{author_icon}')
+                embed.set_author(name=f"{author_name}", url=f"{author_url}", icon_url=f"{author_icon}")
             
             if url_thumbnail:
-                embed.set_thumbnail(url=f'{url_thumbnail}')
+                embed.set_thumbnail(url=f"{url_thumbnail}")
             
             if url_image:
-                embed.set_image(url=f'{url_image}')
+                embed.set_image(url=f"{url_image}")
             
             if footer_text:
-                embed.set_footer(text=f'{footer_text}', icon_url=f'{footer_icon}')
+                embed.set_footer(text=f"{footer_text}", icon_url=f"{footer_icon}")
             
             if footer_timestamp:
                 embed.timestamp = datetime.now()
