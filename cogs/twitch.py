@@ -2,11 +2,12 @@ import discord
 import requests
 from discord.ext import commands
 
+# Creation of the Twitch class which allows the retrieval of the token and the verification of the streamer's status
 class TwitchCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    # Récupération du token Twitch
+    # Function for recovering the Twitch token if the streamer is live
     def get_access_token(self):
         url = "https://id.twitch.tv/oauth2/token"
         data = {
@@ -23,10 +24,10 @@ class TwitchCog(commands.Cog):
             print(f"Access Token: {access_token}")
             return access_token
         else:
-            print(f"Erreur : {response.status_code} - {response.text}")
+            print(f"Error : {response.status_code} - {response.text}")
             return None
             
-    # Vérifier si le stream est en ligne
+    # Check if the stream is online
     def is_streaming(self, access_token):
         url = "https://api.twitch.tv/helix/streams"
         headers = {
@@ -34,27 +35,30 @@ class TwitchCog(commands.Cog):
             "Authorization": f"Bearer {access_token}"
         }
         params = {
-            "user_login": "Neshkel"
+            "user_login": "YourStreamerName"
         }
 
         response = requests.get(url, headers=headers, params=params)
 
         if response.status_code == 200:
             data = response.json()
-            # Si le stream est en cours
+            # If the stream is live, we process the data to be returned
             if data["data"]:
                 response = requests.get(data["data"][0]["thumbnail_url"].replace("{width}", "1280").replace("{height}", "720"))
+
+                # Saving the Twitch thumbnail image so it is visible on Discord
                 file_url = f"./stream_thumbnail/stream_{data['data'][0]['started_at']}.jpg"
                 with open(file_url, "wb") as file:
                     file.write(response.content)
-                    data["data"][0]["image_url"] = f"http://www.discord.neshkel.fr/stream_thumbnail/stream_{data['data'][0]['started_at']}.jpg"
+                    data["data"][0]["image_url"] = f"https://www.your_discord_bot_website.fr/stream_thumbnail/stream_{data['data'][0]['started_at']}.jpg"
+                
                 stream_datas = data['data'][0]
                 return True, stream_datas
             else:
-                print("Le stream est hors ligne.")
+                print("The stream is offline.")
                 return False, None
         else:
-            print(f"Erreur : {response.status_code} - {response.text}")
+            print(f"Error : {response.status_code} - {response.text}")
             return False, None
 
 async def setup(bot):
