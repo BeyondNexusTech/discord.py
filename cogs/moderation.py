@@ -1,17 +1,41 @@
 import discord
 from discord.ext import commands
 
+# Created the Moderation class which allows adding moderation commands
 class ModerationCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    # Added kick command if user has rights
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         await member.kick(reason=reason)
-        await ctx.send(f"{member.name} a été exclu(e).")
+        await ctx.send(f"{member.name} was excluded.")
     
-    # Fonction pour vérifier et contrôler que le message et l'emoji sont bien ceux choisis
+    # Command to add the specified role when adding the reaction on the rules message
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        try:
+            result = await self.reaction_checker(payload)
+            if result:
+                await result["member"].add_roles(result["role"])
+                print(f"The role '{result["role"].name}' has been added to {result["member"].name}")
+        except Exception as e:
+            print(f"Error: {e}")
+    
+    # Commands to remove the specified role when removing the reaction on the rules message
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self, payload):
+        try:
+            result = await self.reaction_checker(payload)
+            if result:
+                await result["member"].remove_roles(result["role"])
+                print(f"The role '{result["role"].name}' has been deleted {result["member"].name}")
+        except Exception as e:
+            print(f"Error: {e}")
+    
+    # Function to check and control that the reaction is correct and is assigned to the correct message
     async def reaction_checker(self, payload):
         if str(payload.message_id) == str(self.bot.DISCORD_RULES_MESSAGE_ID):
             if str(payload.emoji) == str(self.bot.DISCORD_EMOJI_REACTION):
@@ -24,37 +48,15 @@ class ModerationCog(commands.Cog):
                             result = { "member": member, "role": role }
                             return result
                         else:
-                            raise ValueError(f"Le rôle n'a pas été trouvé: {role}")
+                            raise ValueError(f"The role was not found: {role}")
                     else:
-                        raise ValueError(f"Le membre n'a pas été trouvé sur le serveur: {member}")
+                        raise ValueError(f"The member was not found on the server: {member}")
                 else:
-                    raise ValueError(f"Le serveur n'a pas été trouvé: {guild}")
+                    raise ValueError(f"The server was not found: {guild}")
             else:
-                raise ValueError(f"La réaction utilisée n'est pas la bonne: {payload.emoji}")
+                raise ValueError(f"The reaction used is not the correct one: {payload.emoji}")
         else:
-            raise ValueError(f"Le message n'est pas le bon : {payload.message_id}")
-    
-    # Commande pour ajouter le rôle spécifié lors de l'ajout de la réaction sur le message des regles
-    @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload):
-        try:
-            result = await self.reaction_checker(payload)
-            if result:
-                await result["member"].add_roles(result["role"])
-                print(f"Le rôle '{result["role"].name}' a été ajouté à {result["member"].name}")
-        except Exception as e:
-            print(f"Erreur: {e}")
-    
-    # Commandes pour supprimer le rôle spécifié lors de la suppression de la réaction sur le message des regles
-    @commands.Cog.listener()
-    async def on_raw_reaction_remove(self, payload):
-        try:
-            result = await self.reaction_checker(payload)
-            if result:
-                await result["member"].remove_roles(result["role"])
-                print(f"Le rôle '{result["role"].name}' a été supprimé à {result["member"].name}")
-        except Exception as e:
-            print(f"Erreur: {e}")
+            raise ValueError(f"The message is not the right one: {payload.message_id}")
     
 async def setup(bot):
   await bot.add_cog(ModerationCog(bot))
